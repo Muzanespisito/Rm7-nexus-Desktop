@@ -1,0 +1,3 @@
+pyinstaller>=6.0,<7
+cryptography>=42
+secretstorage>=3.3; sys_platform == "linux"

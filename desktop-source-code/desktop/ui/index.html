@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="rm7-version" content="__RM7_VERSION__" />
+  <title>RM7//N3XUS — Desktop</title>
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="gridlines" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="brand">
+      <span class="logo glitch" data-text="RM7//N3XUS">RM7//N3XUS</span>
+      <span class="desktop-tag">DESKTOP</span>
+    </div>
+    <div class="nav-right">
+      <span id="connPill" class="pill muted">STARTING</span>
+      <span class="version">v__RM7_VERSION__</span>
+    </div>
+  </header>
+
+  <section id="boot" class="boot" aria-live="polite">
+    <div class="boot-card">
+      <p class="eyebrow">// LOCAL CONTROL PLANE</p>
+      <h1 class="boot-title">INITIALIZING RM7//N3XUS</h1>
+      <div class="boot-stages" id="bootStages">
+        <div class="boot-stage" data-stage="environment">
+          <span class="dot"></span>
+          <div><strong>Environment check</strong><small>Runtime, directories, dependencies</small></div>
+          <span class="boot-state">WAIT</span>
+        </div>
+        <div class="boot-stage" data-stage="compatibility">
+          <span class="dot"></span>
+          <div><strong>Compatibility check</strong><small>Mission engines and optional capabilities</small></div>
+          <span class="boot-state">WAIT</span>
+        </div>
+        <div class="boot-stage" data-stage="update">
+          <span class="dot"></span>
+          <div><strong>Update policy</strong><small>Signed release and compatibility check</small></div>
+          <span class="boot-state">WAIT</span>
+        </div>
+        <div class="boot-stage" data-stage="account">
+          <span class="dot"></span>
+          <div><strong>Account and session</strong><small>Discord account link verification</small></div>
+          <span class="boot-state">WAIT</span>
+        </div>
+        <div class="boot-stage" data-stage="entitlements">
+          <span class="dot"></span>
+          <div><strong>Entitlements</strong><small>Premium and mission access</small></div>
+          <span class="boot-state">WAIT</span>
+        </div>
+        <div class="boot-stage" data-stage="dashboard">
+          <span class="dot"></span>
+          <div><strong>Mission dashboard</strong><small>Preparing local workspace</small></div>
+          <span class="boot-state">WAIT</span>
+        </div>
+      </div>
+      <div class="boot-footer">
+        <div class="boot-bar"><i id="bootBar"></i></div>
+        <p id="bootMessage" class="boot-message">Reading local environment…</p>
+        <button id="bootRetry" class="btn ghost hidden" type="button">RETRY STARTUP</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="updateGate" class="update-gate hidden" aria-live="polite">
+    <div class="update-card">
+      <p class="eyebrow">// DESKTOP UPDATE REQUIRED</p>
+      <h1 class="update-title">UPDATE <span>RM7//N3XUS</span></h1>
+      <p id="updateGateMessage" class="update-message">This build can no longer connect to the RM7 Nexus service.</p>
+      <div class="update-meta">
+        <div><span>INSTALLED</span><strong id="updateGateCurrent">—</strong></div>
+        <div><span>REQUIRED</span><strong id="updateGateMinimum">—</strong></div>
+        <div><span>LATEST</span><strong id="updateGateLatest">—</strong></div>
+      </div>
+      <ul id="updateGateNotes" class="update-notes"></ul>
+      <div class="update-actions">
+        <button id="updateDownload" class="btn" type="button">DOWNLOAD UPDATE</button>
+        <button id="updateInstall" class="btn hidden" type="button">INSTALL UPDATE</button>
+        <button id="updateRetry" class="btn ghost" type="button">RETRY CHECK</button>
+      </div>
+      <a id="updatePageLink" class="btn wide ghost" href="#" target="_blank" rel="noopener noreferrer">OPEN AUTHENTICATED DOWNLOAD PAGE</a>
+      <p id="updateGateStatus" class="update-status"></p>
+      <p class="update-lock">This update is mandatory. The dashboard remains locked until a verified installer is installed.</p>
+      <button id="updateQuit" class="btn tiny ghost" type="button">QUIT APPLICATION</button>
+    </div>
+  </section>
+
+  <main id="app" class="app hidden">
+    <section id="updateBanner" class="update-banner hidden" role="status">
+      <div>
+        <strong id="updateBannerTitle">UPDATE AVAILABLE</strong>
+        <span id="updateBannerText"></span>
+      </div>
+      <div class="update-banner-actions">
+        <button id="updateBannerDownload" class="btn tiny" type="button">DOWNLOAD</button>
+        <button id="updateBannerDismiss" class="btn tiny ghost" type="button">DISMISS</button>
+      </div>
+    </section>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">// MISSIONS RUN LOCALLY</p>
+        <h1 class="hero-title">MISSION <span>CONTROL</span></h1>
+        <p class="hero-sub">Files are processed on this computer. Account and Premium access are verified by the RM7 Nexus service.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span>PLATFORM</span><strong id="statPlatform">—</strong></div>
+        <div class="stat"><span>ACCOUNT</span><strong id="statAccount">—</strong></div>
+        <div class="stat"><span>PREMIUM</span><strong id="statPremium">—</strong></div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="side">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Status</h2>
+            <button id="refreshChecks" class="btn tiny ghost" type="button">RE-CHECK</button>
+          </div>
+          <div id="checkGroups" class="checks"></div>
+        </section>
+
+        <section class="panel account">
+          <div class="panel-head"><h2>Account</h2><span id="accountBadge" class="pill muted">UNLINKED</span></div>
+          <div id="accountBody" class="account-body"></div>
+          <div id="pairBox" class="pair-box hidden">
+            <p class="pair-label">ONE-TIME PAIRING CODE</p>
+            <div class="pair-code" id="pairCode">—</div>
+            <a id="pairLink" class="btn wide" href="#" target="_blank" rel="noopener noreferrer">OPEN LINK PAGE</a>
+            <p id="pairStatus" class="pair-status">Waiting for authorization…</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h2>Security</h2></div>
+          <ul class="security-list">
+            <li>Loopback-only local API</li>
+            <li>One-time session bootstrap</li>
+            <li>No remote file uploads</li>
+            <li>Engine subprocess isolation</li>
+          </ul>
+          <p class="fineprint">A separate process is not a complete sandbox. Untrusted runtime analysis remains isolated from the desktop host.</p>
+        </section>
+
+        <section class="panel lua-library-panel">
+          <div class="panel-head">
+            <h2>Lua Libraries</h2>
+            <button id="luaLibraryRefresh" class="btn tiny ghost" type="button">REFRESH</button>
+          </div>
+          <p id="luaLibraryPath" class="library-path">No folder selected</p>
+          <div class="library-actions">
+            <input id="luaLibraryInput" type="file" webkitdirectory multiple hidden />
+            <button id="luaLibraryChoose" class="btn tiny" type="button">SELECT FOLDER</button>
+            <button id="luaLibraryClear" class="btn tiny ghost" type="button" disabled>CLEAR</button>
+          </div>
+          <div class="library-manual">
+            <input id="luaLibraryManual" class="library-input" type="text" placeholder="Or enter a full folder path" autocomplete="off" spellcheck="false" aria-label="Lua library folder path" />
+            <button id="luaLibraryManualApply" class="btn tiny ghost" type="button">USE PATH</button>
+          </div>
+          <p id="luaLibraryStatus" class="account-note" aria-live="polite">Module inventory is local to this desktop.</p>
+          <div id="luaLibraryModules" class="library-modules"></div>
+          <p class="fineprint">Only validated pure Lua modules are snapshotted read-only into the isolated runtime. Native DLLs are never loaded.</p>
+        </section>
+      </aside>
+
+      <section class="missions">
+        <article class="mission" data-mission="amx">
+          <header class="mission-head">
+            <div>
+              <span class="mission-tag">LOCAL ENGINE</span>
+              <h2>AMX <span>→</span> PWN</h2>
+            </div>
+            <span id="amxBadge" class="pill muted">LOCKED</span>
+          </header>
+          <p class="mission-copy">Decompile SA-MP AMX bytecode with the existing DeAMX WebAssembly engine. Files never leave this machine.</p>
+          <div class="mode-row" role="radiogroup" aria-label="AMX mode">
+            <button class="mode active" type="button" data-mode="normal" role="radio" aria-checked="true">
+              <strong>NORMAL</strong><small>up to 2 MiB · account</small>
+            </button>
+            <button class="mode" type="button" data-mode="performed" role="radio" aria-checked="false">
+              <strong>PERFORMED</strong><small>up to 20 MiB · premium</small>
+            </button>
+          </div>
+          <label class="dropzone" id="amxDrop" for="amxFile">
+            <input id="amxFile" type="file" accept=".amx" hidden />
+            <span class="drop-icon">[ .AMX ]</span>
+            <span id="amxFileName">Drop an AMX file or click to browse</span>
+          </label>
+          <div class="mission-actions">
+            <button id="amxStart" class="btn" type="button" disabled>START DECOMPILE</button>
+            <button id="amxCancel" class="btn ghost hidden" type="button">CANCEL</button>
+          </div>
+          <div id="amxProgress" class="progress hidden"><i></i></div>
+          <p id="amxStatus" class="status-line">Connect an account to unlock this mission.</p>
+          <details id="amxLogWrap" class="log-wrap hidden">
+            <summary>Execution log</summary>
+            <pre id="amxLog"></pre>
+          </details>
+          <div id="amxSaveRow" class="mission-actions hidden">
+            <button id="amxSave" class="btn" type="button">DOWNLOAD PWN</button>
+          </div>
+          <p id="amxSavedPath" class="fineprint hidden"></p>
+        </article>
+
+        <article class="mission" data-mission="grab-detector">
+          <header class="mission-head">
+            <div>
+              <span class="mission-tag">LOCAL ENGINE</span>
+              <h2>GRAB <span>DETECTOR</span></h2>
+            </div>
+            <span id="grabBadge" class="pill muted">LOCKED</span>
+          </header>
+          <p class="mission-copy">Inspect Lua files for request evidence locally. Performed mode runs inside a Bubblewrap namespace with networking unshared; captured requests are never sent.</p>
+          <div class="mode-row" role="radiogroup" aria-label="Grab Detector mode">
+            <button class="mode active grab-mode" type="button" data-grab-mode="normal" role="radio" aria-checked="true">
+              <strong>NORMAL</strong><small>static · up to 3 MiB</small>
+            </button>
+            <button class="mode grab-mode" type="button" data-grab-mode="performed" role="radio" aria-checked="false">
+              <strong>PERFORMED</strong><small>isolated runtime · premium</small>
+            </button>
+          </div>
+          <section class="grab-setup" aria-label="Grab Detector setup">
+            <div class="grab-step">
+              <span class="step-index">01</span>
+              <div class="step-body">
+                <strong>SELECT LIBRARY FOLDER</strong>
+                <p id="grabLibraryPath" class="library-path">Standard Lua / No External Libraries</p>
+                <div class="library-actions">
+                  <input id="grabLibraryInput" type="file" webkitdirectory multiple hidden />
+                  <button id="grabLibraryChoose" class="btn tiny" type="button">SELECT FOLDER</button>
+                  <button id="grabLibraryNone" class="btn tiny ghost" type="button">NO EXTERNAL LIBRARIES</button>
+                  <button id="grabLibraryRefresh" class="btn tiny ghost" type="button">REFRESH</button>
+                </div>
+                <div class="library-manual">
+                  <input id="grabLibraryManual" class="library-input" type="text" placeholder="Or enter a full folder path" autocomplete="off" spellcheck="false" aria-label="Grab Detector Lua library folder path" />
+                  <button id="grabLibraryManualApply" class="btn tiny ghost" type="button">USE PATH</button>
+                </div>
+                <p id="grabLibraryStatus" class="account-note" aria-live="polite">Libraries are read locally and snapshotted read-only.</p>
+              </div>
+            </div>
+            <div class="grab-step">
+              <span class="step-index">02</span>
+              <div class="step-body">
+                <strong>SELECT LUA SCRIPT</strong>
+                <label class="dropzone" id="grabDrop" for="grabFile">
+                  <input id="grabFile" type="file" accept=".lua,.luac" hidden />
+                  <span class="drop-icon">[ .LUA ]</span>
+                  <span id="grabFileName">Drop a Lua file or click to browse</span>
+                </label>
+              </div>
+            </div>
+          </section>
+          <p id="grabEnvironment" class="status-line" aria-live="polite">Environment: detected after static analysis.</p>
+          <div class="mission-actions">
+            <button id="grabStart" class="btn" type="button" disabled>START SCAN</button>
+            <button id="grabCancel" class="btn ghost hidden" type="button">CANCEL</button>
+          </div>
+          <div id="grabProgress" class="progress hidden"><i></i></div>
+          <p id="grabStatus" class="status-line">Connect an account to unlock this mission.</p>
+          <details id="grabLogWrap" class="log-wrap hidden">
+            <summary>Execution log</summary>
+            <pre id="grabLog"></pre>
+          </details>
+          <section id="grabReport" class="grab-report hidden" aria-live="polite">
+            <div id="grabSummary" class="grab-summary"></div>
+            <div id="grabEvidence" class="grab-evidence"></div>
+            <div class="mission-actions">
+              <button id="grabCopyRedacted" class="btn ghost" type="button">COPY REDACTED</button>
+              <button id="grabDownloadRedacted" class="btn" type="button">DOWNLOAD REDACTED</button>
+              <button id="grabDownloadPrivate" class="btn ghost" type="button">EXPORT PRIVATE&nbsp;…</button>
+            </div>
+            <p class="fineprint">Redacted exports omit exact URLs. The private export is explicit and includes the original evidence.</p>
+            <details class="log-wrap">
+              <summary>Full report JSON</summary>
+              <pre id="grabJson"></pre>
+            </details>
+          </section>
+          <p class="fineprint">No captured request is sent; a clean run is not a safety verdict.</p>
+        </article>
+      </section>
+    </div>
+
+    <footer class="foot">
+      <span>RM7//N3XUS DESKTOP</span>
+      <span>Local processing · Trusted online authorization</span>
+      <button id="quitBtn" class="btn tiny ghost" type="button">QUIT</button>
+    </footer>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

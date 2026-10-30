@@ -1,0 +1,12 @@
+{
+  "name": "rm7-nexus-desktop-source",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Sanitized source export of the RM7 Nexus desktop application and its local runtime helpers.",
+  "dependencies": {
+    "wasmoon": "^1.16.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
